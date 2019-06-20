@@ -12,6 +12,8 @@ PORT=8000
 
 app = Flask(__name__)
 
+r = requests.get('https://jobs.github.com/positions.json?description=python&location=new+york')
+
 @app.before_request
 def before_request():
 	print('request beginning')
@@ -19,16 +21,14 @@ def before_request():
 
 @app.after_request
 def after_request(response):
-	print('response incoming')
+	print('response received')
 	return response
 
 
 @app.route('/api')
 def api_call():
-	
+	print(r.content)
 	return 'hi, put api call response here'
-
-
 
 if __name__ == '__main__':
 	app.run(debug=DEBUG,port=PORT)
