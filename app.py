@@ -2,6 +2,7 @@ from flask import Flask, g, jsonify
 from flask_cors import CORS
 # import models
 # from resources.api import talentlms_api
+import requests
 
 import config
 
@@ -22,9 +23,12 @@ def after_request(response):
 	return response
 
 
-@app.route('/')
-def index():
-	return 'hi, put the response here'
+@app.route('/api')
+def api_call():
+	
+	return 'hi, put api call response here'
+
+
 
 if __name__ == '__main__':
 	app.run(debug=DEBUG,port=PORT)
