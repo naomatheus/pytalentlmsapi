@@ -6,11 +6,13 @@ import requests
 
 import config
 
-DEBUG = True
 HOST='0.0.0.0'
-PORT=8000
 
 app = Flask(__name__)
+
+r = requests.get('https://jobs.github.com/positions.json?description=python&location=new+york')
+
+lms_header = {'setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'application/json'}
 
 @app.before_request
 def before_request():
@@ -19,16 +21,22 @@ def before_request():
 
 @app.after_request
 def after_request(response):
-	print('response incoming')
+	print('response received')
 	return response
 
 
 @app.route('/api')
 def api_call():
 	
-	return 'hi, put api call response here'
+	try: 
+		setApiKey()
+		return 'hi, successful try' 
+	except err
+		return err
+	
 
 
+	
 
 if __name__ == '__main__':
-	app.run(debug=DEBUG,port=PORT)
+	app.run(debug=config.DEBUG,port=config.PORT)
