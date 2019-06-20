@@ -6,9 +6,7 @@ import requests
 
 import config
 
-DEBUG = True
 HOST='0.0.0.0'
-PORT=8000
 
 app = Flask(__name__)
 
@@ -27,8 +25,16 @@ def after_request(response):
 
 @app.route('/api')
 def api_call():
-	print(r.content)
-	return 'hi, put api call response here'
+	
+	try: 
+		setApiKey()
+		return 'hi, successful try' 
+	except err
+		return err
+	
+
+
+	
 
 if __name__ == '__main__':
-	app.run(debug=DEBUG,port=PORT)
+	app.run(debug=config.DEBUG,port=config.PORT)
