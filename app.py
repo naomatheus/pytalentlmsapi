@@ -12,6 +12,8 @@ app = Flask(__name__)
 
 r = requests.get('https://jobs.github.com/positions.json?description=python&location=new+york')
 
+lms_header = {'setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'application/json'}
+
 @app.before_request
 def before_request():
 	print('request beginning')
