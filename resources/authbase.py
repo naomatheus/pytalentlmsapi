@@ -27,7 +27,7 @@ class myAuth(Resource, requests.auth.AuthBase):
 
 	def get(self):
 		try: 
-			print('calling authbase.py route')
+			print('calling authbase.py route for authentication')
 
 			lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'application/json'}
 			headers = lms_header
