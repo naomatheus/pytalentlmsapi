@@ -32,15 +32,15 @@ class myAuth(Resource, requests.auth.AuthBase):
 			lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'application/json'}
 			headers = lms_header
 			print(headers, '<-- HTTP Basic headers')
-
-			req = requests.get('https://allchicago.talentlms.com/api/v1/users', headers=headers, auth=HTTPBasicAuth(config.api_key,''))
+			payload = {'username':'mrobinson'}
+			req = requests.get('https://allchicago.talentlms.com/api/v1/users/username:',params=payload, headers=headers, auth=HTTPBasicAuth(config.api_key,''))
+			# /v1/users/username:{userName} 
 			res = req.text
 			status = req.status_code
 			print('request successful')
-			json_res = json.dumps(res)
-			## json dump to pythor str obj
 			json_loaded_res = json.loads(res)
-			## load response as json
+			# ## load response as json
+			# changessss
 			return json_loaded_res, status
 		except:
 			print('hit exception')
