@@ -52,6 +52,6 @@ auth_api = Blueprint('resources.auth_api', __name__)
 api = Api(auth_api)
 api.add_resource(
 	myAuth,
-	'/users',
-	endpoint='users'
+	'/auth',
+	endpoint='auth'
 )
