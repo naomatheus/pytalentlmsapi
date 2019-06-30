@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint
-
+import json
 from flask_restful import (Resource, Api, reqparse, url_for)
 import config
 import requests
@@ -27,22 +27,26 @@ class myAuth(Resource, requests.auth.AuthBase):
 
 	def get(self):
 		try: 
-			print('calling authbase.py route')
+			print('calling authbase.py route for authentication')
 
 			lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'application/json'}
 			headers = lms_header
-			print(headers, '<-- headers')
-
-			req = requests.get('https://allchicago.talentlms.com/api/v1/users', headers=headers, auth=HTTPBasicAuth(config.api_key,''))
+			print(headers, '<-- HTTP Basic headers')
+			payload = {'username':'mrobinson'}
+			req = requests.get('https://allchicago.talentlms.com/api/v1/users/username:',params=payload, headers=headers, auth=HTTPBasicAuth(config.api_key,''))
+			# /v1/users/username:{userName} 
 			res = req.text
 			status = req.status_code
 			print('request successful')
-
-			return res, status
+			json_loaded_res = json.loads(res)
+			# ## load response as json
+			# changessss
+			return json_loaded_res, status
 		except:
 			print('hit exception')
 			return Exception
 
+	
 
 auth_api = Blueprint('resources.auth_api', __name__)
 api = Api(auth_api)
