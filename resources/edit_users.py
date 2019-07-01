@@ -28,13 +28,14 @@ class EditUsers(Resource, requests.auth.AuthBase):
 			args = self.reqparse.parse_args()
 			# dict_args = dict.items(args)
 			print(args,'<-- args as dict')
+		
 			get_req = requests.post(f'https://allchicago.talentlms.com/api/v1/users/username:', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=args)
 
 			get_res = get_req.text
 			print(get_res,'<-- the get response')
 			## This initial call will get/select the user to be edited
 
-			payload = {"username":"MRobinson", "credits":"25"}
+			payload = {"login":"MRobinson", "credits":"25"}
 			req = requests.post(f'https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=payload)
 
 			res = req.text
