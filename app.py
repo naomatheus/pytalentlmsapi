@@ -7,6 +7,7 @@ import requests
 import config
 from resources.authbase import auth_api
 from resources.users import users_api
+from resources.edit_users import edit_users_api
 
 HOST='0.0.0.0'
 
@@ -14,6 +15,7 @@ app = Flask(__name__)
 
 app.register_blueprint(auth_api, url_prefix='/api/v1')
 app.register_blueprint(users_api, url_prefix='/api/v1')
+app.register_blueprint(edit_users_api, url_prefix='/api/v1')
 
 lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'application/json'}
 

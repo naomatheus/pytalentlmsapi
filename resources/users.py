@@ -20,7 +20,14 @@ class Users(Resource, requests.auth.AuthBase):
             required=True,
             help='No username provided',
             location=['form', 'json']
-    )
+        )
+        # self.reqparse = reqparse.RequestParser()
+        # self.reqparse.add_argument(
+        #     'login',
+        #     required=False,
+        #     help='invalid username',
+        #     location=['form','json']
+        # )
 
        
     ## call constructor methods
@@ -38,7 +45,7 @@ class Users(Resource, requests.auth.AuthBase):
             print(headers,'<-- http basic headers')
             
 
-            req = requests.get('https://allchicago.talentlms.com/api/v1/users/username:', headers=headers, auth=HTTPBasicAuth(config.api_key,''))
+            req = requests.get('https://allchicago.talentlms.com/api/v1/users', headers=headers, auth=HTTPBasicAuth(config.api_key,''))
 
             print(req.content, '<-- content')
 
@@ -53,59 +60,32 @@ class Users(Resource, requests.auth.AuthBase):
             print('hit exception')
             return Exception
 
-    # def post(self):
-        
-    #     try:
-    #         args = self.reqparse.parse_args()
-    #         print(args,'<-- these are args')
-
-    #         lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'application/x-www-form-urlencoded'}
-
-    #         headers = lms_header
-
-    #         req = requests.post('https://allchicago.talentlms.com/api/v1/users/username:', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=args)
-
-    #         print(req.content, '<-- content')
-
-    #         res = req.text
-    #         status = req.status_code
-    #         print('request successful')
-    #         json_loaded_res = json.loads(res)
-
-            
-    #         return json_loaded_res, status
-    #         ## any logic goes here
-    #     # Typically, you want to send some form-encoded data — much like an HTML form. To do this, simply pass a dictionary to the data argument. Your dictionary of data will automatically be form-encoded when the request is made:
-
-    #     except:
-    #         return Exception
-        
     def post(self):
+        
         try:
             args = self.reqparse.parse_args()
-            print(args,'<-- args in put route')
+            print(args,'<-- these are args')
 
             lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'application/x-www-form-urlencoded'}
 
             headers = lms_header
 
-            edit_req = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=args)
+            req = requests.post('https://allchicago.talentlms.com/api/v1/users/username:', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=args)
 
-            edit_res = edit_req.text
-            status = edit_req.status_code
+            print(req.content, '<-- content')
 
-            print(edit_res, '<-- edit res')
+            res = req.text
+            status = req.status_code
+            print('request successful')
+            json_loaded_res = json.loads(res)
 
-            # print(json_loaded_edit_res,'<-- json patched res')
+            
+            return json_loaded_res, status
+            ## any logic goes here
+        # Typically, you want to send some form-encoded data — much like an HTML form. To do this, simply pass a dictionary to the data argument. Your dictionary of data will automatically be form-encoded when the request is made:
 
-
-            return edit_res
         except:
             return Exception
-        
-
-
-
         
 users_api = Blueprint('resources.users', __name__)
 api = Api(users_api)
