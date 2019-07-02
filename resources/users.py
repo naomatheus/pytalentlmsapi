@@ -23,9 +23,16 @@ class Users(Resource, requests.auth.AuthBase):
         )
         # self.reqparse = reqparse.RequestParser()
         # self.reqparse.add_argument(
-        #     'login',
+        #     'credits',
         #     required=False,
-        #     help='invalid username',
+        #     help='no credits given',
+        #     location=['form','json']
+        # )
+        # self.reqparse = reqparse.RequestParser()
+        # self.reqparse.add_argument(
+        #     'user_id',
+        #     required=False,
+        #     help='invalid userid',
         #     location=['form','json']
         # )
 
@@ -39,7 +46,7 @@ class Users(Resource, requests.auth.AuthBase):
 
             print(requests, '<-- requests object')
 
-            lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'application/x-www-form-urlencoded'}
+            lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'multipart/form-data'}
 
             headers = lms_header
             print(headers,'<-- http basic headers')
@@ -66,7 +73,7 @@ class Users(Resource, requests.auth.AuthBase):
             args = self.reqparse.parse_args()
             print(args,'<-- these are args')
 
-            lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'application/x-www-form-urlencoded'}
+            lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key,'setDomain':config.home_domain,'content-type':'multipart/form-data'}
 
             headers = lms_header
 
