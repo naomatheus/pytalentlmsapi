@@ -77,20 +77,21 @@ class EditUsers(Resource, requests.auth.AuthBase):
 			args = self.reqparse.parse_args()
 			#arguments from the form, translated by reqparse 
 			print(args,'<-- args as dict')
-
+			json_args = json.dumps(args)
+			print(json_args, '<-- json args')
 
 			# Send a post request to All Chicago's LMS, use our apikey and domain in headers, use basic http authorization, and send the arguments from the form as the data object in the request 
 			## a data object is typically sent with a post request 
 			
-			req = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=args)
+			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),json=json_args)
 			## need another way to provide the arguments for this to work
 
-			res = req.text
-			status = req.status_code
+			response = res.text
+			status = res.status_code
 			print('request successful')
-			print(req.text,'<-- edituser api call req.text')
+			print(res.text,'<-- edituser api call req.text')
 
-			json_res = json.loads(res)
+			json_res = json.loads(response)
 
 			return json_res
 
