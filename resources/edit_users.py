@@ -11,29 +11,35 @@ class EditUsers(Resource, requests.auth.AuthBase):
 	def __init__(self):
 		# RequestParser (reqparse) is a flask library that let's you send many types of data along with an HTTP request
 		self.reqparse = reqparse.RequestParser()
-		self.reqparse.add_argument(
-			# the add_argument method converts form data into objects that are usable within the code (args) 
-			'username',
-			required=True,
-			help='no username provided',
-			location=['form','json']
-		)
-		self.reqparse.add_argument(
-			'login',
-			required=False,
-			help='no login provided',
-			location=['form','json']
-		)
-		self.reqparse.add_argument(
-			'credits',
-			required=False,
-			help='not an integer',
-			location=['form','json']
-		)
+		# self.reqparse.add_argument(
+		# 	# the add_argument method converts form data into objects that are usable within the code (args) 
+		# 	'username',
+		# 	required=True,
+		# 	help='no username provided',
+		# 	location=['form','json']
+		# )
+		# self.reqparse.add_argument(
+		# 	'login',
+		# 	required=False,
+		# 	help='no login provided',
+		# 	location=['form','json']
+		# )
+		# self.reqparse.add_argument(
+		# 	'credits',
+		# 	required=False,
+		# 	help='not an integer',
+		# 	location=['form','json']
+		# )
 		self.reqparse.add_argument(
 			'user_id',
 			required=False,
 			help='no id',
+			location=['form','json']
+		)
+		self.reqparse.add_argument(
+			'bio',
+			required=False,
+			help='bad bio',
 			location=['form','json']
 		)
 
@@ -74,16 +80,22 @@ class EditUsers(Resource, requests.auth.AuthBase):
 
 			headers = lms_header
 
-			args = self.reqparse.parse_args()
+			payload = self.reqparse.parse_args()
 			#arguments from the form, translated by reqparse 
-			print(args,'<-- args as dict')
-			json_args = json.dumps(args)
-			print(json_args, '<-- json args')
+			print(payload)
+			# payload = args
+			# print(payload,'<-- args as dict')
+			# json_args = json.dumps(args)
+			# print(json_args, '<-- json args')
 
 			# Send a post request to All Chicago's LMS, use our apikey and domain in headers, use basic http authorization, and send the arguments from the form as the data object in the request 
 			## a data object is typically sent with a post request 
+
+			# call get user by id to verify their id
+			# use that id in the payload of the POST request
+
 			
-			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),json=json_args)
+			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=payload)
 			## need another way to provide the arguments for this to work
 
 			response = res.text
