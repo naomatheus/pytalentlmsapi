@@ -74,7 +74,7 @@ class EditUsers(Resource, requests.auth.AuthBase):
 	def post(self):
 		## this class can receive post requests
 		try:
-			print('calling edit users route')
+			print('hitting edit users route in edit_users.py')
 
 			lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key, 'setDomain':config.home_domain, 'content-type':'multipart/form-data'}
 
@@ -82,20 +82,22 @@ class EditUsers(Resource, requests.auth.AuthBase):
 
 			payload = self.reqparse.parse_args()
 			#arguments from the form, translated by reqparse 
-			print(payload)
-			# payload = args
-			# print(payload,'<-- args as dict')
-			# json_args = json.dumps(args)
-			# print(json_args, '<-- json args')
-
+			
+			
+			payload_list = []
+			payload_list.append(payload)
+			print(payload_list,'<-- payload list')
+			json_payload = json.dumps(payload)
+			print(json_payload, '<-- json payload`')
 			# Send a post request to All Chicago's LMS, use our apikey and domain in headers, use basic http authorization, and send the arguments from the form as the data object in the request 
 			## a data object is typically sent with a post request 
 
 			# call get user by id to verify their id
+
 			# use that id in the payload of the POST request
 
 			
-			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=payload)
+			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=payload_list)
 			## need another way to provide the arguments for this to work
 
 			response = res.text
