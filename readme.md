@@ -4,7 +4,7 @@
 This API is built using the Flask framework in Python.
 The server can manage HTTP requests and can so far handle GET and POST requests
 
-## Use Case
+## MVP Use Case
 The config file (hidden) includes access to the TalentLMS database for a nonprofit organization
 Use GET requests to find users by email
 Use POST requests to edit attributes of the found user
