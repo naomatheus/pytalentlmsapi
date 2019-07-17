@@ -17,10 +17,8 @@ Send a proper HTTP request that includes the appropriate attributes in the body 
 
 This image explains the process internally at All Chicago and for a CoC member agency that needs to train a user
 
-<div>
-    CoC Credit Workflow
-    <img src='https://drive.google.com/file/d/1NURQHO6wXtwD2LwZ45gK1PFjxmDf_RXf/view' alt='CoC credit workflow' height='800px'>
-</div>
-![CoC credit workflow](https://drive.google.com/file/d/1NURQHO6wXtwD2LwZ45gK1PFjxmDf_RXf/view)
+
+CoC credit workflow
+(https://drive.google.com/file/d/1NURQHO6wXtwD2LwZ45gK1PFjxmDf_RXf/view?usp=sharing)
 
 
