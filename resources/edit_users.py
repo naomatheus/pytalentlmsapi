@@ -24,12 +24,12 @@ class EditUsers(Resource, requests.auth.AuthBase):
 		# 	help='no login provided',
 		# 	location=['form','json']
 		# )
-		# self.reqparse.add_argument(
-		# 	'credits',
-		# 	required=False,
-		# 	help='not an integer',
-		# 	location=['form','json']
-		# )
+		self.reqparse.add_argument(
+			'email',
+			required=False,
+			help='not an email',
+			location=['form','json']
+		)
 		self.reqparse.add_argument(
 			'user_id',
 			required=False,
@@ -57,9 +57,9 @@ class EditUsers(Resource, requests.auth.AuthBase):
 			#arguments from the form, translated by reqparse 
 			print(args,'<-- args as dict')
 			print(args.user_id, '<--- the user_id')
-
-			get_req = requests.get('https://allchicago.talentlms.com/api/v1/users/id:'+args.user_id, headers=headers, auth=HTTPBasicAuth(config.api_key,''))
-			
+			print(args.email,'<-- users email')
+			# get_req = requests.get('https://allchicago.talentlms.com/api/v1/users/id:'+args.user_id, headers=headers, auth=HTTPBasicAuth(config.api_key,''))
+			get_req = requests.get('https://allchicago.talentlms.com/api/v1/users/email:'+args.email, headers=headers, auth=HTTPBasicAuth(config.api_key,''))
 			get_res = get_req.text
 
 			print(get_res,'<-- the get response')
@@ -76,7 +76,7 @@ class EditUsers(Resource, requests.auth.AuthBase):
 		try:
 			print('hitting edit users route in edit_users.py')
 
-			lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key, 'setDomain':config.home_domain, 'content-type':'multipart/form-data'}
+			lms_header = {'user':config.api_key,'password':'','setApiKey':config.api_key, 'setDomain':config.home_domain, 'content-type':'application/json'}
 
 			headers = lms_header
 
@@ -96,8 +96,11 @@ class EditUsers(Resource, requests.auth.AuthBase):
 
 			# use that id in the payload of the POST request
 
+			## try a hard coded payload
+			hard_payload = {'bio':'changed bio','user_id':'311'}
+
 			
-			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=payload_list)
+			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=hard_payload)
 			## need another way to provide the arguments for this to work
 
 			response = res.text
