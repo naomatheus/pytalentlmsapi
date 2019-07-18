@@ -37,7 +37,7 @@ class EditUsers(Resource, requests.auth.AuthBase):
 			location=['form','json']
 		)
 		self.reqparse.add_argument(
-			'bio',
+			'credits',
 			required=False,
 			help='bad bio',
 			location=['form','json']
@@ -109,7 +109,19 @@ class EditUsers(Resource, requests.auth.AuthBase):
 			user_id = response_dict["id"]
 			
 			# use that id in the payload of the POST request
+			for k, v in response_dict.items():
+				payload_dict = {}
+				if k == 'id':
+					payload_dict.update({'id':v})
+					print(payload_dict, '<-- creating payload dictionary')
+				# extract values that I need and send them into an obj(dict)
+				return payload_dict
 			
+
+
+			print(payload_dict, '<-- payload dictionary')			
+
+
 			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=user_id)
 			# ## need another way to provide the arguments for this to work
 
