@@ -80,6 +80,8 @@ class EditUsers(Resource, requests.auth.AuthBase):
 
 			headers = lms_header
 
+			#remove null values, only send non-null values with payload
+
 			payload = self.reqparse.parse_args()
 			#arguments from the form, translated by reqparse 
 			
@@ -89,28 +91,37 @@ class EditUsers(Resource, requests.auth.AuthBase):
 			print(payload_list,'<-- payload list')
 			json_payload = json.dumps(payload)
 			print(json_payload, '<-- json payload`')
+
 			# Send a post request to All Chicago's LMS, use our apikey and domain in headers, use basic http authorization, and send the arguments from the form as the data object in the request 
 			## a data object is typically sent with a post request 
 
 			# call get user by id to verify their id
+			get_req = requests.get('https://allchicago.talentlms.com/api/v1/users/email:'+payload.email, headers=headers,auth=HTTPBasicAuth(config.api_key,''))
 
-			# use that id in the payload of the POST request
+			get_res = get_req.text
+			print(get_res,  '<-- get response of post route')
+			## the get response returns a string object (JSON approximation)
+			print(json.loads(get_res),'<-- the json loaded string')
+			print(type(json.loads(get_res)),'<-- type of the json loaded string')
 
-			## try a hard coded payload
-			hard_payload = {'bio':'changed bio','user_id':'311'}
-
+			response_dict = json.loads(get_res)
+			print(response_dict["id"],'<--- id of the dictionary of json loaded get res')
+			user_id = response_dict["id"]
 			
-			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=hard_payload)
-			## need another way to provide the arguments for this to work
+			# use that id in the payload of the POST request
+			
+			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=user_id)
+			# ## need another way to provide the arguments for this to work
 
 			response = res.text
-			status = res.status_code
-			print('request successful')
-			print(res.text,'<-- edituser api call req.text')
+			print(response,'<-- valid response from requests.post')
 
-			json_res = json.loads(response)
+			# json_res = json.loads(response)
 
-			return json_res
+			# return json_res
+			# json_get_res = json.loads(get_res)
+			return get_res
+			# return jsonified_get_res
 
 		except:
 			print('hit expection')
