@@ -112,28 +112,28 @@ class EditUsers(Resource, requests.auth.AuthBase):
 			for k, v in response_dict.items():
 				payload_dict = {}
 				if k == 'id':
-					payload_dict.update({'id':v})
+					payload_dict.update({'id':int(v)})
 					print(payload_dict, '<-- creating payload dictionary')
 				# extract values that I need and send them into an obj(dict)
-				return payload_dict
+				res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=payload_dict)
+
+				# ## need another way to provide the arguments for this to work
+
+				response = res.text
+				print(response,'<-- valid response from requests.post')
+
+				# json_res = json.loads(response)
+
+				# return json_res
+				# json_get_res = json.loads(get_res)
+				return response
+				# return jsonified_get_res
+
+
+				# return payload_dict
+
 			
-
-
-			print(payload_dict, '<-- payload dictionary')			
-
-
-			res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=user_id)
-			# ## need another way to provide the arguments for this to work
-
-			response = res.text
-			print(response,'<-- valid response from requests.post')
-
-			# json_res = json.loads(response)
-
-			# return json_res
-			# json_get_res = json.loads(get_res)
-			return get_res
-			# return jsonified_get_res
+			
 
 		except:
 			print('hit expection')
