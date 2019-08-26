@@ -11,35 +11,23 @@ class EditUsers(Resource, requests.auth.AuthBase):
 	def __init__(self):
 		# RequestParser (reqparse) is a flask library that let's you send many types of data along with an HTTP request
 		self.reqparse = reqparse.RequestParser()
-		# self.reqparse.add_argument(
-		# 	# the add_argument method converts form data into objects that are usable within the code (args) 
-		# 	'username',
-		# 	required=True,
-		# 	help='no username provided',
-		# 	location=['form','json']
-		# )
-		# self.reqparse.add_argument(
-		# 	'login',
-		# 	required=False,
-		# 	help='no login provided',
-		# 	location=['form','json']
-		# )
+		
 		self.reqparse.add_argument(
-			'email',
-			required=False,
-			help='not an email',
+			'user_id',
+			required=True,
+			help='internal message - no id',
 			location=['form','json']
 		)
 		self.reqparse.add_argument(
-			'user_id',
+			'email',
 			required=False,
-			help='no id',
+			help='internal message - not valid email',
 			location=['form','json']
 		)
 		self.reqparse.add_argument(
 			'credits',
 			required=False,
-			help='bad bio',
+			help='internal message - no credits',
 			location=['form','json']
 		)
 
@@ -89,8 +77,7 @@ class EditUsers(Resource, requests.auth.AuthBase):
 			payload_list = []
 			payload_list.append(payload)
 			print(payload_list,'<-- payload list')
-			json_payload = json.dumps(payload)
-			print(json_payload, '<-- json payload`')
+		
 
 			# Send a post request to All Chicago's LMS, use our apikey and domain in headers, use basic http authorization, and send the arguments from the form as the data object in the request 
 			## a data object is typically sent with a post request 
@@ -99,40 +86,40 @@ class EditUsers(Resource, requests.auth.AuthBase):
 			get_req = requests.get('https://allchicago.talentlms.com/api/v1/users/email:'+payload.email, headers=headers,auth=HTTPBasicAuth(config.api_key,''))
 
 			get_res = get_req.text
-			print(get_res,  '<-- get response of post route')
-			## the get response returns a string object (JSON approximation)
-			print(json.loads(get_res),'<-- the json loaded string')
-			print(type(json.loads(get_res)),'<-- type of the json loaded string')
 
-			response_dict = json.loads(get_res)
-			print(response_dict["id"],'<--- id of the dictionary of json loaded get res')
-			user_id = response_dict["id"]
 			
-			# use that id in the payload of the POST request
-			for k, v in response_dict.items():
-				payload_dict = {}
+
+			
+			
+			# print(json.loads(get_res),'<-- the json loaded string')
+			# remove extra chars and load the response as raw JSON
+			get_response = json.loads(get_res)
+
+			
+			# # Send payload as a dict
+			payload_dict = {}
+			for k, v in get_response.items():
 				if k == 'id':
-					payload_dict.update({'id':int(v)})
+					payload_dict.update({'user_id':int(v)})
 					print(payload_dict, '<-- creating payload dictionary')
-				# extract values that I need and send them into an obj(dict)
-				res = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=payload_dict)
+			# 	# extract values that I need and send them into an obj(dict)
 
-				# ## need another way to provide the arguments for this to work
-
-				response = res.text
-				print(response,'<-- valid response from requests.post')
-
-				# json_res = json.loads(response)
-
-				# return json_res
-				# json_get_res = json.loads(get_res)
-				return response
-				# return jsonified_get_res
-
-
-				# return payload_dict
+			print(payload_dict,'payload_dict before post')
 
 			
+			# # Send payload as a list of dicts
+			payload_list = []
+			payload_list.append(payload_dict)
+			print(payload_list,'<-- payload list')
+			
+			post_req = requests.post('https://allchicago.talentlms.com/api/v1/edituser', headers=headers, auth=HTTPBasicAuth(config.api_key,''),data=payload_dict)
+
+			post_res = post_req.text
+			print(post_res, '<-- post response')
+
+			parsed_response = jsonify(post_res)
+
+			return parsed_response
 			
 
 		except:
